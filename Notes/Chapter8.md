@@ -34,6 +34,11 @@
         * Pointer to hold dynamic array address
         * int that states capacity of array
         * int to hold # of elements currently stored
+* Copy constructors are automatically called when passing objects by value
+    * compiler by default makes shallow copies, which can mess stuff up when leaving the function since memory will be wiped 
+    * Deep copies can be created if copy constructor is defined by developer
+    * same can be done when you set an object var equal to an instance of another object var
+* Rule of 3 dictates if developer defines destructor, copy constructor, or copy operator, then the other two should be defined as well
 
 ```
 double* recordedTimes; //creates pointer in memory
@@ -44,6 +49,26 @@ int* nullExample = nullptr; //nullptr is the keyword for declaring a pointer as 
 
 Example example = new Example; //Calling new on class sets up constructor
 delete example; 
+
+// Copy constructor
+MyClass::MyClass(const MyClass& origObject) {
+   cout << "Copy constructor called." << endl;
+   dataObject = new int; // Allocate sub-object
+   *dataObject = *(origObject.dataObject);
+}
+
+
+MyClass& MyClass::operator=(const MyClass& objToCopy) {
+   cout << "Assignment op called." << endl;
+   
+   if (this != &objToCopy) {           // 1. Don't self-assign
+      delete dataObject;                  // 2. Delete old dataObject
+      dataObject = new int;               // 3. Allocate new dataObject
+      *dataObject = *(objToCopy.dataObject); // 4. Copy dataObject
+   }
+   
+   return *this;
+}
 ```
 
 ## Memory Regions
