@@ -19,11 +19,12 @@ class List {
         List(T* values, int size);
         ~List();
         int GetCount();
-        void Add(T value);
         T* First();
         T* Last();
         T* At(int index);
         void Print(bool reverse);
+        void Prepend(T value);
+        void Append(T value);
     private:
         int Count;
         ListNode<T>* GetLastNode();

@@ -11,7 +11,7 @@ List<T>::List(T* values, int size) {
     this->Count = 0;
     std::cout << "Size of values: " << size << '\n';
     for(int i = 0; i < size; ++i) {
-        this->Add(values[i]);
+        this->Append(values[i]);
     }
 }
 
@@ -27,22 +27,6 @@ List<T>::~List() {
 template <typename T> 
 int List<T>::GetCount() {
     return this->Count;
-}
-
-template <typename T> 
-void List<T>::Add(T value) {
-    std::cout << "Adding: " << value << '\n';
-    if(this->head == nullptr) {
-        this->head = new ListNode<T>(value, nullptr);
-    } else {
-        // ListNode<T>* item = this->head;
-        // while(item->Next != nullptr) {
-        //     item = item->Next;
-        // }
-        ListNode<T>* item = this->GetLastNode();
-        item->Next = new ListNode<T>(value, item);
-    }
-    this->Count += 1;
 }
 
 template <typename T>
@@ -95,6 +79,27 @@ void List<T>::Print(bool reverse) {
 }
 
 template <typename T>
+void List<T>::Prepend(T value) {
+    ListNode<T>* next = this->head;
+    this->head = new ListNode<T>(value, nullptr);
+    this->head->Next = next;
+    next->Prev = this->head;
+    this->Count += 1;
+}
+
+template <typename T>
+void List<T>::Append(T value) {
+    std::cout << "Adding: " << value << '\n';
+    if(this->head == nullptr) {
+        this->head = new ListNode<T>(value, nullptr);
+    } else {
+        ListNode<T>* item = this->GetLastNode();
+        item->Next = new ListNode<T>(value, item);
+    }
+    this->Count += 1;
+}
+
+template <typename T>
 ListNode<T>* List<T>::GetLastNode() {
     ListNode<T>* item = this->head;
     while(item->Next != nullptr) {
@@ -119,7 +124,8 @@ int main() {
     std::cout << "Starting Test for List\n";
     int* values = new int[5] {1,2,3,4,5};
     List<int>* list = new List(values, 5);
-    list->Add(100);
+    list->Append(100);
+    list->Prepend(87);
 
     std::cout << " List Count: " << list->GetCount() << '\n';
     std::cout << " First Item: " << *(list->First()) << '\n';
